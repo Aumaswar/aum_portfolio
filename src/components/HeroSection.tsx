@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import TextReveal from "./TextReveal";
 import MagneticButton from "./MagneticButton";
 
@@ -7,10 +8,21 @@ const roles = ["Front-End Developer", "UI Engineer", "Creative Coder", "Motion D
 
 const HeroSection = () => {
   const [roleIndex, setRoleIndex] = useState(0);
+  const navigate = useNavigate();
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 600], [1, 0]);
   const scale = useTransform(scrollY, [0, 600], [1, 0.9]);
   const y = useTransform(scrollY, [0, 600], [0, 100]);
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const headerOffset = 96;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.history.replaceState(null, "", `#${id}`);
+    window.scrollTo({ top, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -78,10 +90,16 @@ const HeroSection = () => {
         {/* CTA */}
         <TextReveal delay={0.8}>
           <div className="mt-12 md:mt-16 flex flex-wrap gap-4">
-            <MagneticButton className="bg-primary text-primary-foreground px-8 py-4 font-body font-medium text-sm tracking-wider uppercase">
+            <MagneticButton
+              onClick={() => navigate("/projects")}
+              className="bg-primary text-primary-foreground px-8 py-4 font-body font-medium text-sm tracking-wider uppercase"
+            >
               View Projects
             </MagneticButton>
-            <MagneticButton className="border border-border text-foreground px-8 py-4 font-body font-medium text-sm tracking-wider uppercase hover:border-primary transition-colors">
+            <MagneticButton
+              onClick={() => scrollToSection("contact")}
+              className="border border-border text-foreground px-8 py-4 font-body font-medium text-sm tracking-wider uppercase hover:border-primary transition-colors"
+            >
               Get in Touch
             </MagneticButton>
           </div>

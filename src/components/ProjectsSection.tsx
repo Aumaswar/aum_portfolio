@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { ScrollTextReveal } from "./TextReveal";
+import { featuredProjects } from "@/data/featuredProjects";
 
 interface Project {
   id: number;
+  slug: string;
   title: string;
   category: string;
   description: string;
@@ -11,47 +14,9 @@ interface Project {
   year: string;
 }
 
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "Nebula Dashboard",
-    category: "Web Application",
-    description:
-      "A real-time analytics dashboard with fluid animations and data-driven visualizations. Built for a fintech startup processing millions of transactions.",
-    tech: ["React", "TypeScript", "D3.js", "Framer Motion"],
-    year: "2025",
-  },
-  {
-    id: 2,
-    title: "Synthetik Studio",
-    category: "Creative Platform",
-    description:
-      "An experimental music creation platform with WebAudio API integration, real-time waveform visualization, and collaborative editing features.",
-    tech: ["Next.js", "WebAudio", "Three.js", "WebSockets"],
-    year: "2024",
-  },
-  {
-    id: 3,
-    title: "Monolith Agency",
-    category: "Agency Website",
-    description:
-      "An award-winning agency website featuring scroll-driven storytelling, GSAP animations, and a fully custom CMS-powered project showcase.",
-    tech: ["Astro", "GSAP", "Sanity CMS", "Tailwind"],
-    year: "2024",
-  },
-  {
-    id: 4,
-    title: "Flux Commerce",
-    category: "E-Commerce",
-    description:
-      "A performance-optimized e-commerce experience with sub-second page loads, smooth product transitions, and an immersive shopping flow.",
-    tech: ["Next.js", "Shopify API", "Framer Motion", "Stripe"],
-    year: "2023",
-  },
-];
-
 const ProjectsSection = () => {
   const [activeProject, setActiveProject] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   return (
     <section className="section-padding relative" id="projects">
@@ -69,7 +34,7 @@ const ProjectsSection = () => {
 
         {/* Project list */}
         <div className="space-y-0">
-          {projects.map((project, i) => (
+          {featuredProjects.map((project: Project, i) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0 }}
@@ -108,7 +73,13 @@ const ProjectsSection = () => {
                   <span className="font-body text-sm text-muted-foreground">
                     {project.year}
                   </span>
-                  <motion.div
+                  <motion.button
+                    type="button"
+                    aria-label={`Open ${project.title} case study`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/projects/${project.slug}`);
+                    }}
                     className="w-10 h-10 rounded-full border border-border flex items-center justify-center"
                     animate={{
                       borderColor:
@@ -132,7 +103,7 @@ const ProjectsSection = () => {
                         strokeWidth="1.5"
                       />
                     </svg>
-                  </motion.div>
+                  </motion.button>
                 </div>
               </div>
 
@@ -147,7 +118,7 @@ const ProjectsSection = () => {
                     className="overflow-hidden"
                   >
                     <div className="pb-8 md:pb-12 ml-8 md:ml-10 max-w-2xl">
-                      <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4">
+                      <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4 whitespace-pre-line">
                         {project.description}
                       </p>
                       <div className="flex flex-wrap gap-2">

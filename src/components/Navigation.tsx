@@ -1,21 +1,59 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import MagneticButton from "./MagneticButton";
 
 const links = [
   { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
+  { label: "Projects", href: "/projects" },
   { label: "Contact", href: "#contact" },
 ];
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const scrollToSection = (hash: string) => {
+    const id = hash.replace(/^#/, "");
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const headerOffset = 96;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.history.replaceState(null, "", `#${id}`);
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
+  const handleNavClick = (href: string) => {
+    if (href.startsWith("#")) {
+      scrollToSection(href);
+      return;
+    }
+    navigate(href);
+  };
+
+  const handleHomeClick = () => {
+    if (location.pathname === "/") {
+      window.history.replaceState(null, "", "#");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    navigate("/");
+  };
 
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-40 px-6 md:px-12 lg:px-24 py-6 flex items-center justify-between mix-blend-difference">
-        <a href="#" className="font-display font-bold text-lg text-foreground">
-          AR<span className="text-primary">.</span>
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            handleHomeClick();
+          }}
+          className="font-display font-bold text-lg text-foreground"
+        >
+          AA<span className="text-primary">.</span>
         </a>
 
         {/* Desktop links */}
@@ -24,6 +62,10 @@ const Navigation = () => {
             <a
               key={link.label}
               href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(link.href);
+              }}
               className="font-body text-sm text-foreground/70 hover:text-foreground transition-colors tracking-wider uppercase"
             >
               {link.label}
@@ -60,7 +102,11 @@ const Navigation = () => {
               <motion.a
                 key={link.label}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsOpen(false);
+                  handleNavClick(link.href);
+                }}
                 initial={{ y: 40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 40, opacity: 0 }}

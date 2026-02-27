@@ -1,10 +1,34 @@
 import { motion } from "framer-motion";
 import { ScrollTextReveal } from "./TextReveal";
 
+const Highlight = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
+  return (
+    <span className="relative inline-block">
+      <motion.span
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-[0.08em] top-[55%] rounded-sm bg-primary/10"
+        style={{ originX: 0 }}
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, delay, ease: [0.33, 1, 0.68, 1] }}
+      />
+      <span className="relative">{children}</span>
+    </span>
+  );
+};
+
 const technologies = [
-  "React", "TypeScript", "Next.js", "Framer Motion",
-  "Three.js", "GSAP", "Tailwind CSS", "Node.js",
-  "WebGL", "Figma", "Vite", "GraphQL",
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "React",
+  "TypeScript",
+  "Tailwind CSS",
+  "Vite",
+  "Git",
+  "Figma",
+  "Framer Motion",
 ];
 
 const AboutSection = () => {
@@ -21,22 +45,25 @@ const AboutSection = () => {
             </ScrollTextReveal>
             <ScrollTextReveal delay={0.1}>
               <h2 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-tight">
-                Building the web,{" "}
-                <span className="text-gradient">one pixel</span> at a time.
+                A beginner front-end developer,{" "}
+                <span className="text-gradient">learning every day</span>.
               </h2>
             </ScrollTextReveal>
             <ScrollTextReveal delay={0.2}>
               <p className="mt-8 text-muted-foreground font-body text-lg leading-relaxed">
-                I'm a front-end developer obsessed with the intersection of design
-                and engineering. I craft interfaces that don't just work — they feel
-                alive. Every transition is intentional, every interaction tells a
-                story, and every pixel earns its place.
+                I’m a beginner front-end developer who just started building for the
+                web. I enjoy turning ideas and designs into{" "}
+                <Highlight delay={0.15}>clean, responsive pages</Highlight> and
+                learning by creating <Highlight delay={0.25}>real projects</Highlight>.
               </p>
             </ScrollTextReveal>
             <ScrollTextReveal delay={0.3}>
               <p className="mt-4 text-muted-foreground font-body text-lg leading-relaxed">
-                With 5+ years of experience shipping products for startups and
-                agencies, I bring both creative vision and production-grade code.
+                Right now I’m focused on strengthening the fundamentals—HTML, CSS,
+                JavaScript, and React—while improving my UI skills with{" "}
+                <Highlight delay={0.2}>Tailwind</Highlight> and component libraries.
+                I’m excited to learn from feedback, collaborate, and grow into a{" "}
+                <Highlight delay={0.35}>strong front-end engineer</Highlight>.
               </p>
             </ScrollTextReveal>
           </div>
@@ -64,12 +91,12 @@ const AboutSection = () => {
         {/* Stats */}
         <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16">
           {[
-            { num: "5+", label: "Years Experience" },
-            { num: "40+", label: "Projects Shipped" },
-            { num: "15+", label: "Happy Clients" },
-            { num: "∞", label: "Cups of Coffee" },
+            { num: "New", label: "Frontend Journey" },
+            { num: "Building", label: "Projects as I Learn" },
+            { num: "Open", label: "To Opportunities" },
+            { num: "Daily", label: "Learning Habit" },
           ].map((stat, i) => (
-            <ScrollTextReveal key={stat.label} delay={i * 0.1}>
+            <ScrollTextReveal key={stat.label} delay={i * 0.1} className="py-1">
               <div>
                 <div className="font-display font-bold text-4xl md:text-5xl text-gradient">
                   {stat.num}

@@ -1,8 +1,60 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { toast } from "sonner";
 import { ScrollTextReveal } from "./TextReveal";
 import MagneticButton from "./MagneticButton";
 
+const encode = (data: Record<string, string>) =>
+  new URLSearchParams(data).toString();
+
 const ContactSection = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
+
+  const handleSend = async () => {
+    const n = name.trim();
+    const e = email.trim();
+    const m = message.trim();
+
+    if (!n || !e || !m) {
+      toast("Please fill in name, email, and message.");
+      return;
+    }
+
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+    if (!emailOk) {
+      toast("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      setIsSending(true);
+
+      // Netlify Forms submission (works when deployed on Netlify).
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({
+          "form-name": "contact",
+          name: n,
+          email: e,
+          message: m,
+        }),
+      });
+
+      toast("Message sent. Thank you!");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch {
+      toast("Couldn’t send right now. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <section className="section-padding relative" id="contact">
       <div className="max-w-7xl mx-auto">
@@ -34,21 +86,24 @@ const ContactSection = () => {
 
             <div className="mt-12 space-y-6">
               {[
-                { label: "Email", value: "hello@alexrivera.dev" },
-                { label: "GitHub", value: "github.com/alexrivera" },
-                { label: "Twitter", value: "@alexrivera_dev" },
+                { label: "Email", value: "aum.aswar06@gmail.com", href: "mailto:aum.aswar06@gmail.com" },
+                { label: "GitHub", value: "github.com/Aumaswar", href: "https://github.com/Aumaswar" },
+                { label: "Phone", value: "9913828306", href: "tel:+919913828306" },
               ].map((item, i) => (
                 <ScrollTextReveal key={item.label} delay={0.4 + i * 0.1}>
                   <div className="flex items-center justify-between border-b border-border pb-4 group cursor-pointer">
                     <span className="font-body text-sm text-muted-foreground uppercase tracking-wider">
                       {item.label}
                     </span>
-                    <motion.span
+                    <motion.a
+                      href={item.href}
+                      target={item.label === "GitHub" ? "_blank" : undefined}
+                      rel={item.label === "GitHub" ? "noreferrer" : undefined}
                       className="font-body text-foreground"
                       whileHover={{ x: 5 }}
                     >
                       {item.value}
-                    </motion.span>
+                    </motion.a>
                   </div>
                 </ScrollTextReveal>
               ))}
@@ -60,7 +115,10 @@ const ContactSection = () => {
               <div className="relative">
                 <input
                   type="text"
+                  name="name"
                   placeholder="Your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="w-full bg-transparent border-b border-border py-4 font-body text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
@@ -69,7 +127,10 @@ const ContactSection = () => {
               <div className="relative">
                 <input
                   type="email"
+                  name="email"
                   placeholder="Your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-transparent border-b border-border py-4 font-body text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
@@ -77,15 +138,23 @@ const ContactSection = () => {
             <ScrollTextReveal delay={0.5}>
               <div className="relative">
                 <textarea
+                  name="message"
                   placeholder="Tell me about your project"
                   rows={4}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   className="w-full bg-transparent border-b border-border py-4 font-body text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary transition-colors resize-none"
                 />
               </div>
             </ScrollTextReveal>
             <ScrollTextReveal delay={0.6}>
-              <MagneticButton className="bg-primary text-primary-foreground px-10 py-4 font-body font-medium text-sm tracking-wider uppercase mt-4">
-                Send Message
+              <MagneticButton
+                onClick={handleSend}
+                className={`bg-primary text-primary-foreground px-10 py-4 font-body font-medium text-sm tracking-wider uppercase mt-4 ${
+                  isSending ? "opacity-70 pointer-events-none" : ""
+                }`}
+              >
+                {isSending ? "Sending..." : "Send Message"}
               </MagneticButton>
             </ScrollTextReveal>
           </div>
