@@ -22,8 +22,8 @@ const HeroSection = () => {
   return (
     <motion.section
       style={{ opacity, scale, y }}
-      className="relative min-h-screen flex flex-col justify-center section-padding will-change-transform"
-    >
+      className="relative min-h-screen flex flex-col justify-center section-padding will-change-transform">
+
       {/* Grid lines background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="grid-line-v left-[20%] opacity-20" />
@@ -41,8 +41,8 @@ const HeroSection = () => {
             <motion.div
               className="w-2 h-2 rounded-full bg-primary"
               animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+              transition={{ duration: 2, repeat: Infinity }} />
+
             <span className="text-sm font-body text-muted-foreground tracking-widest uppercase">
               Available for work
             </span>
@@ -52,12 +52,12 @@ const HeroSection = () => {
         {/* Name */}
         <TextReveal delay={0.4}>
           <h1 className="font-display font-extrabold text-[clamp(3rem,10vw,9rem)] leading-[0.9] tracking-tight">
-            Alex
+            ​Aum
           </h1>
         </TextReveal>
         <TextReveal delay={0.5}>
           <h1 className="font-display font-extrabold text-[clamp(3rem,10vw,9rem)] leading-[0.9] tracking-tight">
-            <span className="text-gradient">Rivera</span>
+            <span className="text-gradient">​Aswar</span>
           </h1>
         </TextReveal>
 
@@ -69,8 +69,8 @@ const HeroSection = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -30, opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
-            className="font-body text-lg md:text-xl text-muted-foreground tracking-wide"
-          >
+            className="font-body text-lg md:text-xl text-muted-foreground tracking-wide">
+
             {roles[roleIndex]}
           </motion.div>
         </div>
@@ -92,13 +92,13 @@ const HeroSection = () => {
       <motion.div
         className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      >
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
+
         <span className="text-xs font-body text-muted-foreground tracking-widest uppercase">Scroll</span>
         <div className="w-px h-8 bg-muted-foreground/30" />
       </motion.div>
-    </motion.section>
-  );
+    </motion.section>);
+
 };
 
 export default HeroSection;
