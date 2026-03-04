@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import TiltCard from "@/components/TiltCard";
 
 import Navigation from "@/components/Navigation";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -108,33 +109,35 @@ const Projects = () => {
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.5, delay: i * 0.06, ease: [0.33, 1, 0.68, 1] }}
                 >
-                  <Link to={`/projects/${p.slug}`} className="block">
-                    <Card className="border-border/70 bg-card/40 backdrop-blur hover:border-primary/50 transition-colors">
-                      <CardHeader className="pb-4">
-                        <div className="flex items-start justify-between gap-4">
-                          <CardTitle className="font-display text-xl md:text-2xl">{p.title}</CardTitle>
-                          <span className="font-body text-xs text-muted-foreground">{p.year}</span>
-                        </div>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          <Badge variant="secondary" className="bg-secondary/40">
-                            {p.category}
-                          </Badge>
-                          {p.tech.slice(0, 4).map((t) => (
-                            <Badge key={t} variant="outline" className="border-border/60">
-                              {t}
+                  <Link to={`/projects/${p.slug}`} className="block h-full">
+                    <TiltCard className="rounded-xl overflow-hidden block h-full">
+                      <Card className="h-full relative border-border/70 bg-card/40 backdrop-blur hover:border-primary/50 transition-colors">
+                        <CardHeader className="pb-4">
+                          <div className="flex items-start justify-between gap-4">
+                            <CardTitle className="font-display text-xl md:text-2xl">{p.title}</CardTitle>
+                            <span className="font-body text-xs text-muted-foreground">{p.year}</span>
+                          </div>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <Badge variant="secondary" className="bg-secondary/40">
+                              {p.category}
                             </Badge>
-                          ))}
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-muted-foreground font-body text-sm leading-relaxed whitespace-pre-line">
-                          {p.description}
-                        </p>
-                        <p className="mt-4 font-body text-sm text-foreground/80 underline underline-offset-4">
-                          Read case study
-                        </p>
-                      </CardContent>
-                    </Card>
+                            {p.tech.slice(0, 4).map((t) => (
+                              <Badge key={t} variant="outline" className="border-border/60">
+                                {t}
+                              </Badge>
+                            ))}
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-muted-foreground font-body text-sm leading-relaxed whitespace-pre-line">
+                            {p.description}
+                          </p>
+                          <p className="mt-4 font-body text-sm text-foreground/80 underline underline-offset-4">
+                            Read case study
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </TiltCard>
                   </Link>
                 </motion.div>
               ))}

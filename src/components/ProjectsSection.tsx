@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ScrollTextReveal } from "./TextReveal";
+import TiltCard from "./TiltCard";
 import { featuredProjects } from "@/data/featuredProjects";
 
 interface Project {
@@ -35,107 +36,108 @@ const ProjectsSection = () => {
         {/* Project list */}
         <div className="space-y-0">
           {featuredProjects.map((project: Project, i) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="group border-t border-border last:border-b"
-              onMouseEnter={() => setActiveProject(project.id)}
-              onMouseLeave={() => setActiveProject(null)}
-            >
-              <div className="py-8 md:py-12 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer">
-                <div className="flex-1">
-                  <div className="flex items-baseline gap-4 mb-2">
-                    <span className="font-body text-xs text-muted-foreground">
-                      0{project.id}
+            <TiltCard key={project.id} className="block">
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group border border-transparent hover:border-border/50 hover:bg-card/20 rounded-2xl p-4 md:p-8 transition-colors"
+                onMouseEnter={() => setActiveProject(project.id)}
+                onMouseLeave={() => setActiveProject(null)}
+              >
+                <div className="py-4 md:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer">
+                  <div className="flex-1">
+                    <div className="flex items-baseline gap-4 mb-2">
+                      <span className="font-body text-xs text-muted-foreground">
+                        0{project.id}
+                      </span>
+                      <motion.h3
+                        className="font-display font-bold text-2xl md:text-4xl lg:text-5xl"
+                        animate={{
+                          x: activeProject === project.id ? 20 : 0,
+                          color:
+                            activeProject === project.id
+                              ? "hsl(75 80% 60%)"
+                              : "hsl(0 0% 95%)",
+                        }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                      >
+                        {project.title}
+                      </motion.h3>
+                    </div>
+                    <span className="font-body text-sm text-muted-foreground ml-8 md:ml-10">
+                      {project.category}
                     </span>
-                    <motion.h3
-                      className="font-display font-bold text-2xl md:text-4xl lg:text-5xl"
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <span className="font-body text-sm text-muted-foreground">
+                      {project.year}
+                    </span>
+                    <motion.button
+                      type="button"
+                      aria-label={`Open ${project.title} case study`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/projects/${project.slug}`);
+                      }}
+                      className="w-10 h-10 rounded-full border border-border flex items-center justify-center"
                       animate={{
-                        x: activeProject === project.id ? 20 : 0,
-                        color:
+                        borderColor:
                           activeProject === project.id
                             ? "hsl(75 80% 60%)"
-                            : "hsl(0 0% 95%)",
+                            : "hsl(240 4% 20%)",
+                        rotate: activeProject === project.id ? 45 : 0,
                       }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      transition={{ duration: 0.3 }}
                     >
-                      {project.title}
-                    </motion.h3>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        className="text-foreground"
+                      >
+                        <path
+                          d="M1 13L13 1M13 1H3M13 1V11"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                      </svg>
+                    </motion.button>
                   </div>
-                  <span className="font-body text-sm text-muted-foreground ml-8 md:ml-10">
-                    {project.category}
-                  </span>
                 </div>
-                <div className="flex items-center gap-6">
-                  <span className="font-body text-sm text-muted-foreground">
-                    {project.year}
-                  </span>
-                  <motion.button
-                    type="button"
-                    aria-label={`Open ${project.title} case study`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/projects/${project.slug}`);
-                    }}
-                    className="w-10 h-10 rounded-full border border-border flex items-center justify-center"
-                    animate={{
-                      borderColor:
-                        activeProject === project.id
-                          ? "hsl(75 80% 60%)"
-                          : "hsl(240 4% 20%)",
-                      rotate: activeProject === project.id ? 45 : 0,
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      className="text-foreground"
-                    >
-                      <path
-                        d="M1 13L13 1M13 1H3M13 1V11"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                      />
-                    </svg>
-                  </motion.button>
-                </div>
-              </div>
 
-              {/* Expanded details */}
-              <AnimatePresence>
-                {activeProject === project.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
-                    className="overflow-hidden"
-                  >
-                    <div className="pb-8 md:pb-12 ml-8 md:ml-10 max-w-2xl">
-                      <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4 whitespace-pre-line">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tech.map((t) => (
-                          <span
-                            key={t}
-                            className="px-3 py-1 rounded-full text-xs font-body border border-border text-secondary-foreground"
-                          >
-                            {t}
-                          </span>
-                        ))}
+                {/* Expanded details */}
+                <AnimatePresence>
+                  {activeProject === project.id && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pb-8 md:pb-12 ml-8 md:ml-10 max-w-2xl">
+                        <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4 whitespace-pre-line">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {project.tech.map((t) => (
+                            <span
+                              key={t}
+                              className="px-3 py-1 rounded-full text-xs font-body border border-border text-secondary-foreground"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </TiltCard>
           ))}
         </div>
       </div>

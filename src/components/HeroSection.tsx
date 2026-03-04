@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Canvas } from "@react-three/fiber";
+import { Environment } from "@react-three/drei";
 import TextReveal from "./TextReveal";
 import MagneticButton from "./MagneticButton";
+import GlassShape from "./GlassShape";
 
 const roles = ["Software Engineer", "AI & ML Enthusiast", "Front-End Developer", "Problem Solver"];
 
@@ -35,17 +38,15 @@ const HeroSection = () => {
     <motion.section
       style={{ opacity, scale, y }}
       className="relative min-h-screen flex flex-col justify-center section-padding will-change-transform">
-
-      {/* Grid lines background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="grid-line-v left-[20%] opacity-20" />
-        <div className="grid-line-v left-[40%] opacity-10" />
-        <div className="grid-line-v left-[60%] opacity-10" />
-        <div className="grid-line-v left-[80%] opacity-20" />
-        <div className="grid-line-h top-[25%] opacity-10" />
-        <div className="grid-line-h top-[75%] opacity-10" />
+      {/* 3D Glass Entity Background */}
+      <div className="absolute inset-0 pointer-events-auto z-0" style={{ opacity: 0.8 }}>
+        <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[10, 10, 5]} intensity={1.5} />
+          <Environment preset="city" />
+          <GlassShape />
+        </Canvas>
       </div>
-
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         {/* Status badge */}
         <TextReveal delay={0.2}>
