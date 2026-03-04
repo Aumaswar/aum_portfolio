@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 6% 6%;
+    --foreground: 0 0% 95%;
+
+    --card: 240 5% 10%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 240 5% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 75 80% 60%;
+    --primary-foreground: 240 6% 6%;
+
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 85%;
+
+    --muted: 240 4% 16%;
+    --muted-foreground: 0 0% 55%;
+
+    --accent: 75 80% 60%;
+    --accent-foreground: 240 6% 6%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 4% 20%;
+    --input: 240 4% 20%;
+    --ring: 75 80% 60%;
+
+    --radius: 0.5rem;
+
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+
+    --noise-opacity: 0.03;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: hsl(75 80% 60% / 0.3);
+    color: hsl(0 0% 95%);
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(75 80% 60%), hsl(75 80% 75%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .noise-bg {
+    position: relative;
+  }
+
+  .noise-bg::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: var(--noise-opacity);
+  }
+
+  .magnetic-btn {
+    @apply relative inline-flex items-center justify-center overflow-hidden rounded-full transition-all duration-300;
+  }
+
+  .section-padding {
+    @apply px-6 md:px-12 lg:px-24 py-24 md:py-32;
+  }
+
+  .grid-line {
+    @apply absolute bg-border;
+  }
+
+  .grid-line-v {
+    @apply grid-line w-px h-full top-0;
+  }
+
+  .grid-line-h {
+    @apply grid-line h-px w-full left-0;
+  }
+}
+
+@layer utilities {
+  .will-change-transform {
+    will-change: transform;
+  }
+}
