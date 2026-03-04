@@ -1,57 +1,58 @@
-import { useRef } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
-import { MeshTransmissionMaterial, Float } from '@react-three/drei';
-import * as THREE from 'three';
+import { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { MeshTransmissionMaterial, Float } from "@react-three/drei";
+import * as THREE from "three";
 
-export default function GlassShape() {
-    const meshRef = useRef<THREE.Mesh>(null);
-    const materialRef = useRef<any>(null);
-    const { viewport, mouse } = useThree();
+type Props = {
+  mouse?: [number, number];
+};
 
-    // Animating the shape
-    useFrame((state) => {
-        if (!meshRef.current || !materialRef.current) return;
+export default function GlassShape({ mouse = [0, 0] }: Props) {
+  const meshRef = useRef<THREE.Mesh>(null);
 
-        // Smoothly rotate based on mouse position
-        const targetX = (mouse.x * viewport.width) / 4;
-        const targetY = (mouse.y * viewport.height) / 4;
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    const t = state.clock.getElapsedTime();
 
-        meshRef.current.rotation.y += 0.01;
-        meshRef.current.rotation.x += 0.005;
+    // Follow mouse with smoothing (lerp)
+      // More responsive follow: stronger targets and faster lerp for snappier response
+      const targetY = mouse[0] * 1.0;
+      const targetX = mouse[1] * 0.6;
+      meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, targetY, 0.14);
+      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, targetX, 0.14);
 
-        // Morph the material properties slightly over time for a "liquid" feel
-        materialRef.current.distortion = 0.5 + Math.sin(state.clock.elapsedTime) * 0.2;
-    });
+      const targetPosX = mouse[0] * 0.9;
+      const targetPosY = mouse[1] * 0.35;
+      meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, targetPosX, 0.14);
+      meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, targetPosY, 0.14);
 
-    return (
-        <Float
-            speed={2}
-            rotationIntensity={1}
-            floatIntensity={2}
-        >
-            <mesh ref={meshRef} scale={1.8}>
-                {/* An interesting 3D Geometry (TorusKnot is complex and refracts beautifully) */}
-                <torusKnotGeometry args={[1, 0.4, 256, 64]} />
+      // slight breathing scale
+      const s = 1 + Math.sin(t * 1.1) * 0.01;
+    meshRef.current.scale.setScalar(s * 1.8);
+  });
 
-                {/* The premium Glass/Water material */}
-                <MeshTransmissionMaterial
-                    ref={materialRef}
-                    background={new THREE.Color('#000000')}
-                    transmission={1} // highly transmissive (glass-like)
-                    roughness={0.05} // very smooth
-                    thickness={1.5}  // refracts light heavily
-                    ior={1.2}        // Index of Refraction (glass/water-like)
-                    chromaticAberration={0.4} // Adds the premium RGB split on edges
-                    anisotropy={0.5}
-                    distortion={0.5}
-                    distortionScale={0.3}
-                    temporalDistortion={0.1}
-                    clearcoat={1}
-                    attenuationDistance={0.5}
-                    attenuationColor="#ffffff"
-                    color="#ffffff"
-                />
-            </mesh>
-        </Float>
-    );
+  return (
+    <Float speed={0.6} rotationIntensity={0.4} floatIntensity={0.6}>
+      <mesh ref={meshRef} scale={1.8}>
+        <torusKnotGeometry args={[1, 0.4, 256, 64]} />
+
+        <MeshTransmissionMaterial
+          background={new THREE.Color("#000000")}
+          transmission={1}
+          roughness={0.05}
+          thickness={1.5}
+          ior={1.2}
+          chromaticAberration={0.4}
+          anisotropy={0.5}
+          distortion={0.5}
+          distortionScale={0.3}
+          temporalDistortion={0.1}
+          clearcoat={1}
+          attenuationDistance={0.5}
+          attenuationColor="#ffffff"
+          color="#ffffff"
+        />
+      </mesh>
+    </Float>
+  );
 }
