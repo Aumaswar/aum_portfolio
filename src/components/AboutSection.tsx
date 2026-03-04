@@ -19,16 +19,18 @@ const Highlight = ({ children, delay = 0 }: { children: React.ReactNode; delay?:
 };
 
 const technologies = [
+  "Python",
+  "Artificial Intelligence",
+  "Machine Learning",
+  "Data Analysis",
+  "React",
+  "JavaScript",
   "HTML",
   "CSS",
-  "JavaScript",
-  "React",
-  "TypeScript",
-  "Tailwind CSS",
-  "Vite",
+  "SQL",
   "Git",
-  "Figma",
-  "Framer Motion",
+  "APIs",
+  "Flask",
 ];
 
 const AboutSection = () => {
@@ -45,25 +47,24 @@ const AboutSection = () => {
             </ScrollTextReveal>
             <ScrollTextReveal delay={0.1}>
               <h2 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-tight">
-                A beginner front-end developer,{" "}
-                <span className="text-gradient">learning every day</span>.
+                A Computer Science Engineering student,{" "}
+                <span className="text-gradient">specializing in AI & Web</span>.
               </h2>
             </ScrollTextReveal>
             <ScrollTextReveal delay={0.2}>
               <p className="mt-8 text-muted-foreground font-body text-lg leading-relaxed">
-                I’m a beginner front-end developer who just started building for the
-                web. I enjoy turning ideas and designs into{" "}
-                <Highlight delay={0.15}>clean, responsive pages</Highlight> and
-                learning by creating <Highlight delay={0.25}>real projects</Highlight>.
+                I’m an engineering student specializing in Artificial Intelligence, Python development,
+                and modern Front-End technologies. I enjoy building{" "}
+                <Highlight delay={0.15}>responsive web applications</Highlight> and
+                solving real-world problems through <Highlight delay={0.25}>practical projects</Highlight>.
               </p>
             </ScrollTextReveal>
             <ScrollTextReveal delay={0.3}>
               <p className="mt-4 text-muted-foreground font-body text-lg leading-relaxed">
-                Right now I’m focused on strengthening the fundamentals—HTML, CSS,
-                JavaScript, and React—while improving my UI skills with{" "}
-                <Highlight delay={0.2}>Tailwind</Highlight> and component libraries.
-                I’m excited to learn from feedback, collaborate, and grow into a{" "}
-                <Highlight delay={0.35}>strong front-end engineer</Highlight>.
+                Currently, I'm focused on developing intelligent software systems using{" "}
+                Machine Learning and <Highlight delay={0.2}>Data Analysis</Highlight>.
+                I’m excited to combine strong analytical thinking and fast learning
+                ability to build <Highlight delay={0.35}>user-focused software</Highlight>.
               </p>
             </ScrollTextReveal>
           </div>

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import TextReveal from "./TextReveal";
 import MagneticButton from "./MagneticButton";
 
-const roles = ["Front-End Developer", "UI Engineer", "Creative Coder", "Motion Designer"];
+const roles = ["Software Engineer", "AI & ML Enthusiast", "Front-End Developer", "Problem Solver"];
 
 const HeroSection = () => {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -64,7 +64,7 @@ const HeroSection = () => {
         {/* Name */}
         <TextReveal delay={0.4}>
           <h1 className="font-display font-extrabold text-[clamp(3rem,10vw,9rem)] leading-[0.9] tracking-tight">
-            ​Aum
+            Aum
           </h1>
         </TextReveal>
         <TextReveal delay={0.5}>
